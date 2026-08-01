@@ -1,15 +1,16 @@
 import { Outlet } from "react-router-dom";
 
+import { Header } from "@/shared/components";
+
 const AppLayout = () => {
   return (
-    <div>
-      {/* Header */}
-      {/* Sidebar */}
+    <>
+      <Header />
 
-      <main>
+      <main className="mx-auto max-w-7xl p-6">
         <Outlet />
       </main>
-    </div>
+    </>
   );
 };
 
