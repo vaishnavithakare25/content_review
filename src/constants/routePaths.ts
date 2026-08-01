@@ -8,6 +8,8 @@ export const ROUTE_PATHS = {
   EDIT_POST: "/posts/:id/edit",
 
   NOT_FOUND: "*",
+
+  FORBIDDEN: "/forbidden"
 } as const;
 
 export const buildRoute = {

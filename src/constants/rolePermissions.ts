@@ -1,7 +1,13 @@
-import { PERMISSIONS } from "./Permissions";
-import { ROLES } from "./roles";
+// import { PERMISSIONS, ROLES } from "@/constants";
+// import type { Permission, Role } from "@/constants";
 
-export const ROLE_PERMISSIONS = {
+import { PERMISSIONS } from "./permissions";
+import { ROLES } from "./roles";
+import type { Permission } from "./permissions";
+import type { Role } from "./roles";
+
+
+export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
   [ROLES.CONTENT_MANAGER]: [
     PERMISSIONS.POSTS_VIEW,
     PERMISSIONS.POSTS_CREATE,
