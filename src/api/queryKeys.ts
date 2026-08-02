@@ -1,4 +1,4 @@
-// src/api/queryKeys.ts
+import type { GetPostsParamsDto } from "@/features/posts/dto";
 
 export const QUERY_KEYS = {
   AUTH: {
@@ -8,11 +8,11 @@ export const QUERY_KEYS = {
   POSTS: {
     ALL: ["posts"] as const,
 
-    LIST: <T>(params?: T) =>
+    LIST: (params?: GetPostsParamsDto) =>
       ["posts", "list", params] as const,
 
-    DETAIL: (id: number | string) =>
-      ["posts", id] as const,
+    DETAIL: (id: number) =>
+      ["posts", "detail", id] as const,
 
     SEARCH: (query: string) =>
       ["posts", "search", query] as const,
@@ -26,7 +26,7 @@ export const QUERY_KEYS = {
   COMMENTS: {
     ALL: ["comments"] as const,
 
-    BY_POST: (postId: number | string) =>
+    BY_POST: (postId: number) =>
       ["comments", "post", postId] as const,
   },
 } as const;
