@@ -3,10 +3,12 @@ import type { GetPostsParamsDto } from "../dto";
 export const parsePostSearchParams = (
   searchParams: URLSearchParams
 ): GetPostsParamsDto => {
-  const page = Number(searchParams.get("page") ?? "1");
+  // const page = Number(searchParams.get("page") ?? "1");
   const limit = Number(searchParams.get("limit") ?? "10");
 
-  const skip = (page - 1) * limit;
+  const skip = Number(searchParams.get("skip") ?? "0");
+
+  // const skip = (page - 1) * limit;
 
   const order = searchParams.get("order");
   const sortBy = searchParams.get("sortBy");

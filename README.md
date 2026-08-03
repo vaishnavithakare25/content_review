@@ -1,75 +1,335 @@
-# React + TypeScript + Vite
+# Content Review Workspace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript application that allows different user roles to browse, review, create, edit, and delete content using the DummyJSON API.
 
-Currently, two official plugins are available:
+This project was developed as part of the **React Project Readiness Practice Assignment** and demonstrates production-oriented React architecture, React Query, role-based authorization, reusable components, and feature-based folder organization.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+# Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- React Router
+- TanStack React Query
+- Axios
+- Zustand
+- React Hook Form
+- Zod
+- Tailwind CSS
+- React Hot Toast
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Authentication
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Mock login using three roles
+- Persisted authentication using Zustand
+- Protected routes
+- Forbidden page for unauthorized access
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Roles
 
+- Content Manager
+- Reviewer
+- Reader
+
+---
+
+## Posts
+
+- View posts
+- Search posts
+- Sort posts
+- Filter by tag
+- Pagination
+- View post details
+- Create post
+- Edit post
+- Delete post
+
+---
+
+## Comments
+
+- View review comments
+- Add review comments
+- Independent loading/error state
+
+---
+
+## Permissions
+
+| Feature | Content Manager | Reviewer | Reader |
+|----------|-----------------|----------|----------|
+| View Posts | ✅ | ✅ | ✅ |
+| Create Post | ✅ | ❌ | ❌ |
+| Edit Post | ✅ | ❌ | ❌ |
+| Delete Post | ✅ | ❌ | ❌ |
+| View Comments | ✅ | ✅ | ✅ |
+| Add Comment | ✅ | ✅ | ❌ |
+
+---
+
+# Folder Structure
+
+```text
+src
+├── api
+├── app
+├── constants
+├── features
+│   ├── auth
+│   ├── comments
+│   └── posts
+├── layouts
+├── providers
+├── routes
+├── shared
+├── store
+└── types
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Project Architecture
 
 ```
+Pages
+   │
+   ▼
+Hooks
+   │
+   ▼
+Services
+   │
+   ▼
+API Client
+   │
+   ▼
+DummyJSON API
+```
+
+DTO mapping is performed inside the service/mapper layer and never inside components or hooks.
+
+---
+
+# React Query Hooks
+
+## usePostsQuery
+
+### Responsibility
+
+- Fetch paginated posts
+- Handle search
+- Handle sorting
+- Handle tag filtering
+- Cache posts list
+
+---
+
+## usePostQuery
+
+### Responsibility
+
+- Fetch a single post
+- Cache post details
+
+---
+
+## useTagsQuery
+
+### Responsibility
+
+- Fetch available tags
+- Cache tag list
+
+---
+
+## usePostCommentsQuery
+
+### Responsibility
+
+- Fetch comments for a post
+- Cache comments independently from the post
+
+---
+
+## useCreatePostMutation
+
+### Responsibility
+
+- Create a post
+- Invalidate posts list cache
+
+---
+
+## useUpdatePostMutation
+
+### Responsibility
+
+- Update a post
+- Invalidate posts list
+- Invalidate post detail
+
+---
+
+## useDeletePostMutation
+
+### Responsibility
+
+- Delete a post
+- Invalidate posts list
+
+---
+
+## useAddCommentMutation
+
+### Responsibility
+
+- Add a review comment
+- Invalidate post comments
+
+---
+
+# Query Key Strategy
+
+```text
+POSTS
+│
+├── ALL
+├── LIST(search, tag, sort, page, limit)
+├── DETAIL(postId)
+
+COMMENTS
+│
+└── POST(postId)
+
+TAGS
+│
+└── ALL
+```
+
+Every server input that changes returned data is included in the query key.
+
+---
+
+# Cache Invalidation
+
+| Mutation | Invalidated Query |
+|-----------|-------------------|
+| Create Post | Posts List |
+| Update Post | Posts List, Post Detail |
+| Delete Post | Posts List |
+| Add Comment | Post Comments |
+
+---
+
+# State Management
+
+| State | Library |
+|--------|---------|
+| Authentication | Zustand |
+| Server State | React Query |
+| Forms | React Hook Form |
+| Validation | Zod |
+| Search & Filters | URL Search Params |
+
+---
+
+# UI States
+
+The application provides:
+
+- Loading state
+- Empty state
+- Error state
+- Success toast
+- Error toast
+- Delete confirmation dialog
+
+---
+
+# Route Protection
+
+Routes are protected using authentication and permission-based authorization.
+
+Unauthorized users are redirected to the **Forbidden** page.
+
+---
+
+# Error Handling
+
+- Centralized API error handling
+- AppError abstraction
+- ErrorState component
+- User-friendly error messages
+- Retry supported by React Query
+
+---
+
+# Assignment Notes
+
+This project follows the assignment requirements by:
+
+- Using feature-based architecture
+- Separating hooks, services, DTOs, and API calls
+- Keeping DTO mapping outside hooks/components
+- Using focused React Query hooks
+- Implementing role-based permissions
+- Maintaining reusable shared components
+- Providing independent loading/error states
+- Showing consistent mutation feedback using toast notifications
+
+---
+
+# Getting Started
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Run development server
+
+```bash
+npm run dev
+```
+
+Run lint
+
+```bash
+npm run lint
+```
+
+Build project
+
+```bash
+npm run build
+```
+
+Preview production build
+
+```bash
+npm run preview
+```
+
+---
+
+# API
+
+The application uses the DummyJSON REST API.
+
+- Posts
+- Tags
+- Comments
+
+---
+
+# Author
+
+**Vaishnavi Thakare**

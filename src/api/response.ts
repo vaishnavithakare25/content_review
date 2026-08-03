@@ -1,4 +1,3 @@
-// src/api/response.ts
 
 /**
  * Common pagination metadata returned by DummyJSON.

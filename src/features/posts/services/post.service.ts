@@ -4,7 +4,10 @@ import {
   getPostById,
   getPosts,
   updatePost, 
-  getTags 
+  getTags,
+  getPostsByTag, 
+  searchPosts,
+
   
 } from "../api/posts.api";
 
@@ -30,7 +33,18 @@ import type { SelectOption } from "@/shared/components";
 export const getPostsService = async (
   params?: GetPostsParamsDto
 ): Promise<PostsResponse> => {
-  const response = await getPosts(params);
+  let response;
+
+  if (params?.tag) {
+    response = await getPostsByTag(
+      params.tag,
+      params
+    );
+  } else if (params?.q) {
+    response = await searchPosts(params);
+  } else {
+    response = await getPosts(params);
+  }
 
   return {
     posts: mapPostDtoToPosts(response.posts),

@@ -47,7 +47,15 @@ const PostsPage = () => {
     const updatedParams =
       new URLSearchParams(searchParams);
 
-    updatedParams.set("page", page.toString());
+    // updatedParams.set("page", page.toString());
+
+    const limit = params.limit ?? 10;
+
+    updatedParams.set(
+      "skip", String((page -1) * limit )
+    );
+
+    updatedParams.set("limit", String(limit));
 
     setSearchParams(updatedParams);
   };

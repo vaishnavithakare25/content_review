@@ -69,3 +69,37 @@ export const getTags = async (): Promise<TagDto[]> => {
 
   return data;
 };
+
+export const getPostsByTag = async (
+  tag: string,
+  params?: GetPostsParamsDto
+): Promise<PostsResponseDto> => {
+  const { data } = await apiClient.get(
+    ENDPOINTS.POSTS.BY_TAG(tag),
+    {
+      params: {
+        skip: params?.skip,
+        limit: params?.limit,
+      },
+    }
+  );
+
+  return data;
+};
+
+export const searchPosts = async (
+  params: GetPostsParamsDto
+): Promise<PostsResponseDto> => {
+  const { data } = await apiClient.get(
+    ENDPOINTS.POSTS.SEARCH,
+    {
+      params: {
+        q: params.q,
+        skip: params.skip,
+        limit: params.limit,
+      },
+    }
+  );
+
+  return data;
+};

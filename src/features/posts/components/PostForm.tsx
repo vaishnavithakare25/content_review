@@ -18,7 +18,7 @@ import {
 } from "../validation/post.schema";
 
 import PostTagField from "./PostTagField";
-// import type {Control } from "react-hook-form";
+
 
 interface PostFormProps {
   defaultValues?: Partial<PostFormData>;
