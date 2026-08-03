@@ -3,7 +3,9 @@ import {
   deletePost,
   getPostById,
   getPosts,
-  updatePost,
+  updatePost, 
+  getTags 
+  
 } from "../api/posts.api";
 
 import {
@@ -21,6 +23,9 @@ import type {
   Post,
   PostsResponse,
 } from "../types";
+
+import { mapTagDtoToOptions } from "../mapper/tag.mapper";
+import type { SelectOption } from "@/shared/components";
 
 export const getPostsService = async (
   params?: GetPostsParamsDto
@@ -64,4 +69,10 @@ export const deletePostService = async (
   postId: number
 ): Promise<void> => {
   await deletePost(postId);
+};
+
+export const getTagsService = async (): Promise<SelectOption[]> => {
+  const response = await getTags();
+
+  return mapTagDtoToOptions(response);
 };

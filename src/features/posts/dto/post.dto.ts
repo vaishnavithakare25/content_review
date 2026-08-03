@@ -3,10 +3,10 @@ export interface PostDto {
     title: string;
     body: string;
     tags: string[];
-    reactions:{
+    reactions?:{
         likes: number;
         dislikes: number;
     };
-    views: number;
+    views?: number;
     userId: number;
 }

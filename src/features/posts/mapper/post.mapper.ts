@@ -6,9 +6,9 @@ export const mapPostDtoToPost = (dto: PostDto): Post => ({
    title: dto.title,
    body: dto.body,
    tags: dto.tags,
-   likes: dto.reactions.likes,
-   dislikes: dto.reactions.dislikes,
-   views: dto.views,
+   likes: dto.reactions?.likes ?? 0,
+   dislikes: dto.reactions?.dislikes ?? 0,
+   views: dto.views ?? 0,
    userId: dto.userId,
 
 });

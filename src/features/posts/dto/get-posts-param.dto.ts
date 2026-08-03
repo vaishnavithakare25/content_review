@@ -1,7 +1,7 @@
 export interface GetPostsParamsDto{
     limit?: number;
     skip?: number;
-    sortBy?:string;
+    sortBy?: "title" | "views";
     order?: "asc" | "desc";
     q?: string;
     tag?:string;

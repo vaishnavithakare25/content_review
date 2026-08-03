@@ -5,13 +5,15 @@ import type {
   CreatePostDto,
   GetPostsParamsDto,
   PostDto,
-  PostResponseDto,
+  PostsResponseDto,
   UpdatePostDto,
 } from "../dto";
 
+import type { TagDto } from "../dto/tag.dto";
+
 export const getPosts = async (
   params?: GetPostsParamsDto
-): Promise<PostResponseDto> => {
+): Promise<PostsResponseDto> => {
   const { data } = await apiClient.get(ENDPOINTS.POSTS.LIST, {
     params,
   });
@@ -58,4 +60,12 @@ export const deletePost = async (
   await apiClient.delete(
     ENDPOINTS.POSTS.DELETE(postId)
   );
+};
+
+export const getTags = async (): Promise<TagDto[]> => {
+  const { data } = await apiClient.get<TagDto[]>(
+    ENDPOINTS.POSTS.TAGS
+  );
+
+  return data;
 };

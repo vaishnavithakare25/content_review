@@ -1,6 +1,6 @@
 import type { PostDto } from "./post.dto";
 
-export interface PostResponseDto{
+export interface PostsResponseDto{
     posts: PostDto[];
     total: number;
     skip: number;
