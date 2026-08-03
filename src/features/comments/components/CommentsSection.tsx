@@ -13,6 +13,11 @@ import type { CommentFormData } from "../validation/comment.schema";
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
 
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "@/shared/utils/toast";
+
 interface CommentsSectionProps {
   postId: number;
 }
@@ -36,18 +41,28 @@ const CommentsSection = ({
   } = useAddCommentMutation();
 
   const handleSubmit = async (
-    values: CommentFormData
-  ) => {
-    if (!user) {
-      return;
-    }
+  values: CommentFormData
+) => {
+  if (!user) {
+    return;
+  }
 
+  try {
     await mutateAsync({
       body: values.body,
       postId,
       userId: user.id,
     });
-  };
+
+    showSuccessToast(
+      "Comment added successfully."
+    );
+  } catch {
+    showErrorToast(
+      "Failed to add comment."
+    );
+  }
+};
 
  return (
   <section className="space-y-6 border-t pt-6">

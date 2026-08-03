@@ -6,6 +6,10 @@ import  PostForm  from "../components/PostForm";
 import { useCreatePostMutation, useTagsQuery } from "../hooks";
 import type { PostFormData } from "../validation/post.schema";
 import type { CreatePostDto } from "../dto";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "@/shared/utils/toast";
 
 const CreatePostPage = () => {
   const navigate = useNavigate();
@@ -16,22 +20,32 @@ const CreatePostPage = () => {
     useCreatePostMutation();
 
   const handleSubmit = async (
-  values: PostFormData
+  values: PostFormData,
 ) => {
   const payload: CreatePostDto = {
     title: values.title,
     body: values.body,
     userId: 1,
-    tags: values.tags,
   };
 
- 
+  if (values.tags?.length) {
+    payload.tags = values.tags;
+  }
 
-  await mutateAsync(payload);
+  try {
+    await mutateAsync(payload);
 
-  navigate(ROUTE_PATHS.POSTS);
+    showSuccessToast(
+      "Post created successfully.",
+    );
+
+    navigate(ROUTE_PATHS.POSTS);
+  } catch {
+    showErrorToast(
+      "Failed to create post.",
+    );
+  }
 };
-
   return (
     <PostForm
       tags={tags}

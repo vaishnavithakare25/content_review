@@ -4,9 +4,9 @@ import { ROUTE_PATHS } from "@/constants";
 import { useAuthStore } from "@/store/auth.store";
 import { Button } from "@/shared/components";
 
-import type { HeaderProps } from "./header.type";
 
-const Header = ({}: HeaderProps) => {
+
+const Header = () => {
   const navigate = useNavigate();
 
   const user = useAuthStore((state) => state.user);

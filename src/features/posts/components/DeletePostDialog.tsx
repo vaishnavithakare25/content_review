@@ -4,6 +4,11 @@ import { ConfirmationDialog } from "@/shared/components/ConfirmationDialog";
 
 import { useDeletePostMutation } from "../hooks";
 
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "@/shared/utils/toast";
+
 interface DeletePostDialogProps {
   postId: number;
   open: boolean;
@@ -16,7 +21,7 @@ const DeletePostDialog = ({
   onClose,
 }: DeletePostDialogProps) => {
   const {
-    mutate,
+    mutateAsync,
     isPending,
     isSuccess,
   } = useDeletePostMutation();
@@ -27,9 +32,21 @@ const DeletePostDialog = ({
     }
   }, [isSuccess, onClose]);
 
-  const handleDelete = () => {
-    mutate(postId);
-  };
+  const handleDelete = async () => {
+  try {
+    await mutateAsync(postId);
+
+    showSuccessToast(
+      "Post deleted successfully."
+    );
+
+    onClose();
+  } catch {
+    showErrorToast(
+      "Failed to delete post."
+    );
+  }
+};
 
   return (
     <ConfirmationDialog

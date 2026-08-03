@@ -21,6 +21,12 @@ import type {
 
 import type { UpdatePostDto } from "../dto";
 
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "@/shared/utils/toast";
+
+
 const EditPostPage = () => {
   const navigate = useNavigate();
 
@@ -44,23 +50,31 @@ const EditPostPage = () => {
   } = useUpdatePostMutation();
 
   const handleSubmit = async (
-    values: PostFormData
-  ) => {
-    const payload: UpdatePostDto = {
-      title: values.title,
-      body: values.body,
-      tags: values.tags,
-    };
+  values: PostFormData
+) => {
+  const payload: UpdatePostDto = {
+    title: values.title,
+    body: values.body,
+    tags: values.tags,
+  };
 
+  try {
     await mutateAsync({
       postId,
       payload,
     });
 
-    // TODO: Success toast
+    showSuccessToast(
+      "Post updated successfully."
+    );
 
     navigate(ROUTE_PATHS.POSTS);
-  };
+  } catch {
+    showErrorToast(
+      "Failed to update post."
+    );
+  }
+};
 
   if (isPending) {
     return <Loader />;

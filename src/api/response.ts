@@ -9,17 +9,6 @@ export interface PaginationResponse {
   limit: number;
 }
 
-/**
- * Generic paginated list response.
- *
- * Example:
- * {
- *   posts: [],
- *   total: 150,
- *   skip: 0,
- *   limit: 30
- * }
- */
 export type ListResponse<
   TKey extends string,
   TItem,
